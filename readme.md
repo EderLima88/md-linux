@@ -1,9 +1,12 @@
 # Conectar Maquinas Linux e WSL
+
+## *Manual resumido*
+
 ## Conexões
 
-Este é um texto em **negrito** e este é em *itálico*.
 
-1. Abrir aplicativo wsl e Windows PowerShell, que pode ser:
+
+1. Abrir aplicativo WSL e Windows PowerShell, que pode ser:
 ![alt text](image.png)
 
     Exemplo (Kali): 
@@ -12,9 +15,21 @@ Este é um texto em **negrito** e este é em *itálico*.
     Exemplo (Ubuntu):<br>
 ![alt text](image-2.png)
 
-2. Ligar maquina fisica
+2. Ligar máquina física
 
-3. Obter ip das maquinas wsl e físicas com:<br>
+3. Instalar o SSH Server na máquina física:
+   
+        sudo apt install openssh-server -y
+        sudo systemctl enable ssh
+        sudo systemctl start ssh
+
+4. Habilitar o SSH Server no Windows:
+   
+        Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+        Start-Service sshd
+        New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
+
+5. Obter ip das máquinas WSL e físicas com:<br>
 Linux:
 
         ip addr
@@ -29,14 +44,14 @@ Windows:
         exemplo:
         Endereço IPv4. . . . . . . .  . . . . . . . : 192.168.15.7
 
-4. Os ips e portas wsl: <br>
+5. Os ips e portas wsl: <br>
 As mquinas linux apenas se conectam ao ip do windows.<br>
 O Windows redireciona para wsl por um túnel.<br>
 Exemplo de redirecionamento do ip:
 
         netsh interface portproxy add v4tov4 listenport=2222    listenaddress=0.0.0.0 connectport=22 connectaddress=IP_do_WSL
 
-5. Com os ip's identificados use o nome do usuário e os ip's das máquinas:
+6. Com os ip's identificados use o nome do usuário e os ip's das máquinas:
 
         No WSL windows:
                 nomeusuario@ipDaMaquinaLinux
@@ -49,7 +64,7 @@ Exemplo de redirecionamento do ip:
 
 
 ### Código
-`Máquina física com Linux Mint acessando wsl kali (ip Windows):`
+`Máquina física com Linux Mint acessando WSL kali (ip Windows):`
 
 ```bash
 eder2@eder-POSITIVO-MOBILE:~$ ssh eder@192.168.15.3
